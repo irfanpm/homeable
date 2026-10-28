@@ -1,25 +1,13 @@
-# Local verification — 27 October 2026
+# Homebele verification — 28 October 2026
 
-The source was installed and verified in **D:\homebele** on Windows, using Node.js 20.19.0 and Next.js 16.4.3. No deployment was performed.
+Updated project: **D:\homebele**. No deployment performed.
 
-## Automated checks
-
-- Production build: passed, including TypeScript compilation and route generation.
-- Six validation tests: passed. Coverage includes all four translation dictionaries, product/import schemas, hostile supplier URLs and image paths, price constraints, import bounds and scrypt password verification.
-- Thirty-two integration checks: passed using an isolated temporary real MongoDB and production server. Covers all four locale pages; unsupported-locale 404; admin access control; origin checks; login success/failure; HttpOnly/Secure/SameSite cookies; MongoDB draft creation, update/publish and deletion; public search/category filtering; private supplier field exclusion from API and page HTML; import preview, draft commit and duplicate protection; invalid IDs; logout; forged tokens; and persistent login throttling.
-- Production dependency audit: zero reported vulnerabilities at the time checked.
-
-## Browser checks
-
-Verified the desktop storefront and admin area in Chromium, including temporary admin login, persistence across reload, Malayalam product editing, saving a price change, import validation/preview, committing a disposable import as a draft, and sign-out. Real user store data was not involved.
-
-Responsive browser checks cover desktop and a 390 × 844 mobile viewport. Malayalam exposed a narrow-screen heading overflow, corrected with flexible heading sizing and wrapping before final delivery. Storefront search, filters, saved pieces, product details, language switching and unavailable-contact feedback are checked in the final local preview.
-
-## Configuration still required
-
-- Real MongoDB connection, admin email, password hash and random session secret in `.env.local`.
-- Real store WhatsApp number.
-- Supplier-verified product data, actual matching licensed product photography and review of all language translations.
-- Business-specific delivery, return and privacy terms.
-
-The storefront includes a labelled illustrative catalog when MongoDB is not configured; admin remains locked until setup. The original referenced mockup was not retrievable, so the implementation is an original cream/olive design rather than a verified exact reproduction. Supplier import is a reviewed JSON workflow; it does not scrape Meesho, sync inventory or place orders.
+- Thirteen unique owner-selected Meesho products inserted into the dedicated `homebele` MongoDB database; the repeated scrub-brush link was deduplicated. Latest direct database check: connected, 13 published products.
+- Thirteen built-in ImageGen lead images in the cream/olive visual theme, plus thirteen original supplier photos in the galleries. Full prompt set: `PRODUCT_IMAGE_PROMPTS.md`. Product assets: `public/images/products/`.
+- EN/ML/HI/TA names and descriptions validated. Prices match the reviewed 27 October 2026 Meesho snapshot without markup or invented discounts. Conflicting supplier specifications were omitted or marked for confirmation.
+- WhatsApp enquiry destination configured as **+91 77360 36583**, with a public fallback in `src/lib/store-contact.ts` and a local environment override. A browser click on the organiser enquiry button opened WhatsApp with `phone=917736036583` and the product name, ₹239 price and product URL prefilled. No WhatsApp message was sent during setup.
+- Production build and TypeScript compilation passed. Nine validation tests and all 32 isolated backend integration checks passed (41 total).
+- Live public API verified all 13 unique products, six populated categories and all 26 product image responses. Supplier links/notes and private database settings were absent from public API/page/client assets.
+- Desktop browser verified all 13 cards and original-photo gallery switching. Cleaning-category filtering and ascending price order were verified. Malayalam mobile review at a 390 × 844 viewport found and corrected heading/count overflow; the final document width equals its available viewport width, with all 13 products present. Existing card dimensions and visual system are preserved.
+- A temporary Atlas TLS connection failure occurred during an earlier idle session. The final direct connection check succeeded again with 13 published products. TLS/certificate verification was not weakened. An explicitly labelled local snapshot preview is available through `npm run preview:snapshot`; normal startup remains database-backed.
+- Credentials remain only in the installed private `.env.local`, excluded from portable deliverables. Admin email/password setup remains separate from the catalog and business contact configuration.
