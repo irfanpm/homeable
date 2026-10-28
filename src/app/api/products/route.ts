@@ -1,0 +1,3 @@
+import { getCatalog,publicProduct } from '@/lib/catalog';
+export const dynamic='force-dynamic';
+export async function GET(request:Request){const {products,demo,error,source}=await getCatalog();if(error)return Response.json({error:'Catalog temporarily unavailable'},{status:503});const q=new URL(request.url).searchParams;const query=(q.get('q')||'').toLocaleLowerCase();const category=q.get('category');const filtered=products.filter(p=>(!category||p.category===category)&&(!query||Object.values(p.name).some(n=>n.toLocaleLowerCase().includes(query))));return Response.json({products:filtered.map(publicProduct),demo,source});}

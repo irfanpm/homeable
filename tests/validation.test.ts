@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { productSchema,importSchema,safeImage } from '../src/lib/validation';
+import { sampleProducts } from '../src/lib/sample-products';
+import { dictionaries } from '../src/lib/i18n';
+import { hashPassword,verifyPassword } from '../src/lib/auth';
+const {id,...valid}=sampleProducts[0];void id;
+test('all sample products have valid four-language data',()=>{for(const {id,...p} of sampleProducts){void id;assert.equal(productSchema.safeParse(p).success,true);}});
+test('locale dictionaries have matching keys and no empty translations',()=>{const keys=Object.keys(dictionaries.en).sort();for(const d of Object.values(dictionaries)){assert.deepEqual(Object.keys(d).sort(),keys);assert.ok(Object.values(d).every(Boolean));}});
+test('unsafe supplier URLs and image paths are rejected',()=>{for(const url of ['javascript:alert(1)','https://meesho.com.evil.example/p/a','http://meesho.com/p/a','https://user:password@meesho.com/p/a'])assert.equal(productSchema.safeParse({...valid,meeshoUrl:url}).success,false);assert.equal(safeImage('//evil.example/x'),false);assert.equal(safeImage('/images/../../secret'),false);assert.equal(safeImage('data:text/html,x'),false);assert.equal(safeImage('https://images.example.com/vase.jpg'),true);});
+test('missing translations, negative prices, invalid discounts and extra fields are rejected',()=>{assert.equal(productSchema.safeParse({...valid,name:{en:'Vase'}}).success,false);assert.equal(productSchema.safeParse({...valid,price:-1}).success,false);assert.equal(productSchema.safeParse({...valid,compareAt:1}).success,false);assert.equal(productSchema.safeParse({...valid,role:'admin'}).success,false);});
+test('import batch size and structure are bounded',()=>{assert.equal(importSchema.safeParse({products:[]}).success,false);assert.equal(importSchema.safeParse({products:Array(51).fill(valid)}).success,false);assert.equal(importSchema.safeParse({products:[valid]}).success,true);});
+test('password hashes use independent salts and verify correctly',async()=>{const a=await hashPassword('long-test-password');const b=await hashPassword('long-test-password');assert.notEqual(a,b);assert.equal(await verifyPassword('long-test-password',a),true);assert.equal(await verifyPassword('wrong',a),false);assert.equal(await verifyPassword('anything','broken-hash'),false);});

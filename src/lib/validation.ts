@@ -1,0 +1,7 @@
+import { z } from 'zod';
+import { categories } from './types';
+const text = z.string().trim().min(1).max(500);
+const localized = z.object({ en:text, ml:text, hi:text, ta:text });
+export function safeImage(value: string) { if (/^\/images\/[a-zA-Z0-9/_\-.]+$/.test(value) && !value.includes('..')) return true; try { const u = new URL(value); return u.protocol === 'https:' && !u.username && !u.password; } catch { return false; } }
+export const productSchema = z.object({ slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(100), name:localized, description:localized, category:z.enum(categories), price:z.number().min(0).max(1000000), compareAt:z.number().min(0).max(1000000), images:z.array(z.string().max(2000).refine(safeImage, 'Use an HTTPS image URL or a local /images/ path')).min(1).max(8), badge:z.enum(['','new','bestseller']), featured:z.boolean(), active:z.boolean(), material:z.string().trim().max(200), dimensions:z.string().trim().max(200), meeshoUrl:z.string().max(2000).refine(v => { if(!v) return true; try { const u=new URL(v); return u.protocol==='https:' && (u.hostname==='meesho.com'||u.hostname==='www.meesho.com') && !u.username && !u.password; } catch { return false; } }, 'Use a full https://www.meesho.com product link'), sourceNote:z.string().trim().max(1000) }).strict().refine(v=>v.compareAt===0 || v.compareAt>=v.price,{message:'Original price must be at least the selling price',path:['compareAt']});
+export const importSchema = z.object({ products:z.array(productSchema).min(1).max(50) }).strict();
