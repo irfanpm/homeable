@@ -1,6 +1,6 @@
 # Owner-selected product collection
 
-13 unique products from 14 submitted links. One repeated scrub-brush link was deduplicated. Prices checked on 27 October 2026 and used without markup as requested. Supplier links and notes are excluded from public responses.
+15 unique products: the original 13 from 14 submitted links, plus two additions on 28 October 2026. One original scrub-brush link was deduplicated. The initial 13 prices were checked on 27 October and used without markup; the two later selling prices were explicitly supplied by the owner. Supplier links and notes are excluded from public responses.
 
 | Product | Price (INR) | Category |
 | --- | ---: | --- |
@@ -17,9 +17,13 @@
 | Silicone mealtime set · 6 pieces | 392 | kitchen |
 | Retractable towel clip | 195 | bath |
 | Silicone pastry mat | 122 | kitchen |
+| Green hanging sink strainer | 230 | kitchen |
+| Silicone soap-dispensing bath brush | 180 | bath |
 
 All products have EN/ML/HI/TA names and descriptions, a Homebele styled image, and the original supplier photograph in the gallery. Conflicting supplier metadata was not turned into factual marketing claims. Prices and colour availability require confirmation on enquiry.
 
 Import with `npm run import:selected` after configuring `.env.local`. This inserts missing slugs only; it does not overwrite existing administrator edits. Future unreviewed JSON batches imported through admin continue to enter as drafts.
 
 Images were created using the built-in ImageGen tool. Final prompts: `PRODUCT_IMAGE_PROMPTS.md`. Project assets: `public/images/products/`. No deployment was performed.
+
+For the two latest products, `npm run import:additions` uses actual supplier images until the four new assets have been deployed, then safely adopts the styled galleries. Source files are ready; code deployment needs owner approval.

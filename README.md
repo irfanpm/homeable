@@ -14,7 +14,7 @@ npm run dev
 
 Open **http://127.0.0.1:3000/en**. For a portable copy, extract the ZIP anywhere and run the same commands in that folder.
 
-Without `.env.local`, the storefront displays the reviewed snapshot of 13 owner-selected Meesho products. With MongoDB configured, published database products are authoritative. Admin stays locked until its email and password hash are configured. No default credentials or fake WhatsApp number are included.
+Without `.env.local`, the storefront displays the reviewed snapshot of 15 owner-selected Meesho products. With MongoDB configured, published database products are authoritative. Admin stays locked until its email and password hash are configured. No default credentials or fake WhatsApp number are included.
 
 ## Connect your store
 
@@ -91,3 +91,13 @@ WhatsApp enquiries use **+91 77360 36583**. Product buttons prepare a message wi
 For a local review while Atlas is unavailable, run `npm run build` followed by `npm run preview:snapshot`. This explicitly uses the reviewed 13-product local snapshot and labels the preview. It does not write to MongoDB or silently replace the normal database catalog. The public products API reports `source: "snapshot"` or `source: "database"`.
 
 The 13 products were successfully inserted in the dedicated `homebele` database and verified again on 28 October 2026. A temporary Atlas TLS connection failure during an earlier idle session recovered; certificate verification was never disabled. Normal `npm run dev` / `npm start` use MongoDB. The explicit snapshot command is available for local review if Atlas is unreachable; it is labelled and is not proof of a healthy live connection. Atlas connection troubleshooting: https://www.mongodb.com/docs/atlas/troubleshoot-connection/.
+
+## Two additional products — 28 October 2026
+
+Green hanging sink strainer (`eufg9g`) is ₹230 and silicone soap-dispensing bath brush (`202cnx`) is ₹180, both explicitly priced by the owner. They bring the published database catalog to 15 products. Their names/descriptions support EN/ML/HI/TA. `data/product-additions-2026-10-28.json` contains only this two-product batch.
+
+The two new styled images and original galleries are included under `public/images/products/`. New public asset files require a website deployment. Until those files are deployed, these two database entries use their actual HTTPS supplier photos so live cards remain usable. No code deployment was performed for this addition.
+
+After deploying the updated source with approval, run `npm run import:additions` from the private local installation. The command verifies all four deployed image files against local SHA-256 digests before switching these two original-photo galleries to their styled/local galleries. It preserves other product fields and any gallery subsequently edited by the owner. Before deployment, rerunning is safe and keeps the supplier photos. Do not run this database-writing command as a public build step.
+
+`npm run import:selected` is insert-only. For this already-installed database, use `import:additions` for the two-product rollout. Prices reflect the owner-specified selling rates, not the supplier's separately observed offer prices.
